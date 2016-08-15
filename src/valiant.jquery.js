@@ -6,7 +6,7 @@
  * Released under the MIT license:
  *   http://www.opensource.org/licenses/mit-license.php
  *
- * Jquery plugin pattern based on https://github.com/jquery-boilerplate/jquery-patterns/blob/master/patterns/jquery.basic.plugin-boilerplate.js 
+ * Jquery plugin pattern based on https://github.com/jquery-boilerplate/jquery-patterns/blob/master/patterns/jquery.basic.plugin-boilerplate.js
  */
 
 /* REQUIREMENTS:
@@ -58,7 +58,9 @@ three.js r65 or higher
             muted: true,
             debug: false,
             flatProjection: false,
-            autoplay: true
+            autoplay: true,
+            widthSegments: 80,
+            heightSegments: 50
         };
 
     // The actual plugin constructor
@@ -211,7 +213,7 @@ three.js r65 or higher
             this._texture.format = THREE.RGBFormat;
 
             // create ThreeJS mesh sphere onto which our texture will be drawn
-            this._mesh = new THREE.Mesh( new THREE.SphereGeometry( 500, 80, 50 ), new THREE.MeshBasicMaterial( { map: this._texture } ) );
+            this._mesh = new THREE.Mesh( new THREE.SphereGeometry( 500, this.options.widthSegments, this.options.heightSegments ), new THREE.MeshBasicMaterial( { map: this._texture } ) );
             this._mesh.scale.x = -1; // mirror the texture, since we're looking from the inside out
             this._scene.add(this._mesh);
 

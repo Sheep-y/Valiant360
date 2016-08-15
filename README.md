@@ -11,7 +11,7 @@ The aim of this project is to provide a free, minimalist 360 degree video WebGL 
 
 There is currently no mobile support, but as Chrome and Safari mobile editions enable WebGL, this should be forwards-compatible with them.
 
-#### Usage 
+#### Usage
 
 See the [demo folder](https://github.com/flimshaw/Valiant360/tree/master/demo) or the [example](http://flimshaw.github.io/Valiant360).  Moving the mouse will pan the camera, and the scroll wheel will zoom in and out.
 
@@ -46,7 +46,9 @@ More detailed api documentation pending, for now the below explains about all yo
 		lat: 0, 				// initial lat for camera angle
 		loop: "loop", 			// video loops by default
 		muted: true,			// video muted by default
-		autoplay: true			// video autoplays by default
+		autoplay: true,			// video autoplays by default
+		widthSegments: 80,		// mesh sphere width segments, reduce to improve performance
+		heightSegments: 50		// mesh sphere height segments, reduce to improve performance
 	});
 
 	// play video
@@ -62,7 +64,7 @@ More detailed api documentation pending, for now the below explains about all yo
 	$('.valiantContainer').Valiant360('loadPhoto', 'path/to/file.jpg');
 
 	// destroy Valiant360 processing/resources (however, will not remove element from the dom. That is left up to you)
-	$('.valiantContainer').Valiant360('destroy');	
+	$('.valiantContainer').Valiant360('destroy');
 
 ```
 
