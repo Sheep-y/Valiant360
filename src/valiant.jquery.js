@@ -130,58 +130,62 @@ three.js r65 or higher
 
         createMediaPlayer: function() {
 
+            // cache frequently accessed variables
+            var options = this.options;
+            var element = $( this.element );
+
             // create a local THREE.js scene
             this._scene = new THREE.Scene();
 
             // create ThreeJS camera
-            this._camera = new THREE.PerspectiveCamera(this._fov, $(this.element).width() / $(this.element).height(), 0.1, 1000);
+            this._camera = new THREE.PerspectiveCamera(this._fov, element.width() / element.height(), 0.1, 1000);
             this._camera.setLens(this._fov);
 
             // create ThreeJS renderer and append it to our object
             this._renderer = Detector.webgl? new THREE.WebGLRenderer(): new THREE.CanvasRenderer();
-            this._renderer.setSize( $(this.element).width(), $(this.element).height() );
+            this._renderer.setSize( element.width(), element.height() );
             this._renderer.autoClear = false;
             this._renderer.setClearColor( 0x333333, 1 );
 
             // append the rendering element to this div
-            $(this.element).append(this._renderer.domElement);
+            element.append(this._renderer.domElement);
 
             // figure out our texturing situation, based on what our source is
-            if( $(this.element).attr('data-photo-src') ) {
+            if( element.attr('data-photo-src') ) {
                 this._isPhoto = true;
-                THREE.ImageUtils.crossOrigin = this.options.crossOrigin;
-                this._texture = THREE.ImageUtils.loadTexture( $(this.element).attr('data-photo-src') );
+                THREE.ImageUtils.crossOrigin = options.crossOrigin;
+                this._texture = THREE.ImageUtils.loadTexture( element.attr('data-photo-src') );
             } else {
                 this._isVideo = true;
                 // create off-dom video player
-                this._video = document.createElement( 'video' );
-                this._video.setAttribute('crossorigin', this.options.crossOrigin);
-                this._video.style.display = 'none';
-                $(this.element).append( this._video );
-                this._video.loop = this.options.loop;
-                this._video.muted = this.options.muted;
-                this._texture = new THREE.Texture( this._video );
+                var video = this._video = document.createElement( 'video' );
+                video.setAttribute('crossorigin', options.crossOrigin);
+                video.style.display = 'none';
+                element.append( video );
+                video.loop = options.loop;
+                video.muted = options.muted;
+                this._texture = new THREE.Texture( video );
 
                 // make a self reference we can pass to our callbacks
                 var self = this;
 
                 // attach video player event listeners
-                this._video.addEventListener("ended", function() {
+                video.addEventListener("ended", function() {
 
                 });
 
                 // Progress Meter
-                this._video.addEventListener("progress", function() {
+                video.addEventListener("progress", function() {
                     var percent = null;
-                    if (self._video && self._video.buffered && self._video.buffered.length > 0 && self._video.buffered.end && self._video.duration) {
-                        percent = self._video.buffered.end(0) / self._video.duration;
+                    if (video && video.buffered && video.buffered.length > 0 && video.buffered.end && video.duration) {
+                        percent = video.buffered.end(0) / video.duration;
                     }
                     // Some browsers (e.g., FF3.6 and Safari 5) cannot calculate target.bufferered.end()
                     // to be anything other than 0. If the byte count is available we use this instead.
                     // Browsers that support the else if do not seem to have the bufferedBytes value and
                     // should skip to there. Tested in Safari 5, Webkit head, FF3.6, Chrome 6, IE 7/8.
-                    else if (self._video && self._video.bytesTotal !== undefined && self._video.bytesTotal > 0 && self._video.bufferedBytes !== undefined) {
-                        percent = self._video.bufferedBytes / self._video.bytesTotal;
+                    else if (video && video.bytesTotal !== undefined && video.bytesTotal > 0 && video.bufferedBytes !== undefined) {
+                        percent = video.bufferedBytes / video.bytesTotal;
                     }
 
                     // Someday we can have a loading animation for videos
@@ -194,16 +198,16 @@ three.js r65 or higher
                 });
 
                 // Video Play Listener, fires after video loads
-                this._video.addEventListener("canplaythrough", function() {
+                video.addEventListener("canplaythrough", function() {
 
-                    if(self.options.autoplay === true) {
-                        self._video.play();
+                    if(options.autoplay === true) {
+                        video.play();
                         self._videoReady = true;
                     }
                 });
 
                 // set the video src and begin loading
-                this._video.src = $(this.element).attr('data-video-src');
+                video.src = element.attr('data-video-src');
 
             }
 
@@ -213,7 +217,8 @@ three.js r65 or higher
             this._texture.format = THREE.RGBFormat;
 
             // create ThreeJS mesh sphere onto which our texture will be drawn
-            this._mesh = new THREE.Mesh( new THREE.SphereGeometry( 500, this.options.widthSegments, this.options.heightSegments ), new THREE.MeshBasicMaterial( { map: this._texture } ) );
+            var material = new THREE.MeshBasicMaterial( { map: this._texture } );
+            this._mesh = new THREE.Mesh( new THREE.SphereGeometry( 500, options.widthSegments, options.heightSegments ), material );
             this._mesh.scale.x = -1; // mirror the texture, since we're looking from the inside out
             this._scene.add(this._mesh);
 
@@ -249,24 +254,21 @@ three.js r65 or higher
 
             // create a self var to pass to our controller functions
             var self = this;
+            var element = $( this.element );
 
-            this.element.addEventListener( 'mousemove', this.onMouseMove.bind(this), false );
-            this.element.addEventListener( 'touchmove', this.onMouseMove.bind(this), false );
-            this.element.addEventListener( 'mousewheel', this.onMouseWheel.bind(this), false );
-            this.element.addEventListener( 'DOMMouseScroll', this.onMouseWheel.bind(this), false );
-            this.element.addEventListener( 'mousedown', this.onMouseDown.bind(this), false);
-            this.element.addEventListener( 'touchstart', this.onMouseDown.bind(this), false);
-            this.element.addEventListener( 'mouseup', this.onMouseUp.bind(this), false);
-            this.element.addEventListener( 'touchend', this.onMouseUp.bind(this), false);
+            element.on( 'mousemove touchmove', this.onMouseMove.bind(this) );
+            element.on( 'mousewheel DOMMouseScroll', this.onMouseWheel.bind(this) );
+            element.on( 'mousedown touchstart' , this.onMouseDown.bind(this) );
+            element.on( 'mouseup touchend' , this.onMouseUp.bind(this) );
 
             $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange',this.fullscreen.bind(this));
 
             $(window).resize(function() {
-                self.resizeGL($(self.element).width(), $(self.element).height());
+                self.resizeGL(element.width(), element.height());
             });
 
             // Player Controls
-            $(this.element).find('.playButton').click(function(e) {
+            element.find('.playButton').click(function(e) {
                 e.preventDefault();
                 if($(this).hasClass('fa-pause')) {
                     $(this).removeClass('fa-pause').addClass('fa-play');
@@ -277,9 +279,9 @@ three.js r65 or higher
                 }
             });
 
-            $(this.element).find(".fullscreenButton").click(function(e) {
+            element.find(".fullscreenButton").click(function(e) {
                 e.preventDefault();
-                var elem = $(self.element)[0];
+                var elem = element[0];
                 if($(this).hasClass('fa-expand')) {
                     if (elem.requestFullscreen) {
                         elem.requestFullscreen();
@@ -303,7 +305,7 @@ three.js r65 or higher
                 }
             });
 
-            $(this.element).find(".muteButton").click(function(e) {
+            element.find(".muteButton").click(function(e) {
                 e.preventDefault();
                 if($(this).hasClass('fa-volume-off')) {
                     $(this).removeClass('fa-volume-off').addClass('fa-volume-up');
