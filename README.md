@@ -48,7 +48,8 @@ More detailed api documentation pending, for now the below explains about all yo
 		muted: true,			// video muted by default
 		autoplay: true,			// video autoplays by default
 		widthSegments: 80,		// mesh sphere width segments, reduce to improve performance
-		heightSegments: 50		// mesh sphere height segments, reduce to improve performance
+		heightSegments: 50,		// mesh sphere height segments, reduce to improve performance
+		filter: 'LinearFilter',	// filter used to scale texture; use 'NearestFilter' for better performance
 	});
 
 	// play video

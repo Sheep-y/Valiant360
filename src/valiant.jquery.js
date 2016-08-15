@@ -60,7 +60,8 @@ three.js r65 or higher
             flatProjection: false,
             autoplay: true,
             widthSegments: 80,
-            heightSegments: 50
+            heightSegments: 50,
+            filter: 'LinearFilter'
         };
 
     // The actual plugin constructor
@@ -212,8 +213,8 @@ three.js r65 or higher
             }
 
             this._texture.generateMipmaps = false;
-            this._texture.minFilter = THREE.LinearFilter;
-            this._texture.magFilter = THREE.LinearFilter;
+            this._texture.minFilter = THREE[ options.filter ];
+            this._texture.magFilter = THREE[ options.filter ];
             this._texture.format = THREE.RGBFormat;
 
             // create ThreeJS mesh sphere onto which our texture will be drawn
