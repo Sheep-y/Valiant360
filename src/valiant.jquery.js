@@ -338,10 +338,11 @@ three.js r65 or higher
                     this._lat -= y;
                 }
             } else {
-                x = event.pageX - $(this.element).find('canvas').offset().left;
-                y = event.pageY - $(this.element).find('canvas').offset().top;
-                this._lon = ( x / $(this.element).find('canvas').width() ) * 430 - 225;
-                this._lat = ( y / $(this.element).find('canvas').height() ) * -180 + 90;
+                var canvas = $(this.element).find('canvas');
+                x = event.pageX - canvas.offset().left;
+                y = event.pageY - canvas.offset().top;
+                this._lon = ( x / canvas.width() ) * 430 - 225;
+                this._lat = ( y / canvas.height() ) * -180 + 90;
             }
         },
 

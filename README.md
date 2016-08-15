@@ -38,18 +38,18 @@ More detailed api documentation pending, for now the below explains about all yo
 		crossOrigin: 'anonymous',	// valid keywords: 'anonymous' or 'use-credentials'
 		clickAndDrag: false,	// use click-and-drag camera controls
 		flatProjection: false,	// map image to appear flat (often more distorted)
-		fov: 35, 				// initial field of view
+		fov: 35, 				// initial field of view, adjustable with mousewheel
 		fovMin: 3, 				// min field of view allowed
 		fovMax: 100, 				// max field of view allowed
 		hideControls: false,	// hide player controls
-		lon: 0, 				// initial lon for camera angle
-		lat: 0, 				// initial lat for camera angle
+		lon: 0, 				// initial longitude degree for camera angle: 0=back, 90=left, 180=front, 270=right.
+		lat: 0, 				// initial latitude degree for camera angle: 90=top, -90=bottom.
 		loop: "loop", 			// video loops by default
 		muted: true,			// video muted by default
 		autoplay: true,			// video autoplays by default
 		widthSegments: 80,		// mesh sphere width segments, reduce to improve performance
 		heightSegments: 50,		// mesh sphere height segments, reduce to improve performance
-		filter: 'LinearFilter',	// filter used to scale texture; use 'NearestFilter' for better performance
+		filter: 'LinearFilter',	// texture filter; use 'NearestFilter' to improve performance
 	});
 
 	// play video
