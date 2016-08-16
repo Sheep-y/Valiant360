@@ -23,7 +23,7 @@ module.exports = function(grunt) {
       build: {
         files: [
           { expand: true, cwd: 'src/css/fonts/', src: ["*"], dest: "build/css/fonts/" },
-          { expand: true, cwd: 'demo/js', src: ["three.min.js", "jquery-1.7.2.min.js"], dest: "build/js" },
+          { expand: true, cwd: 'demo/js', src: ["three.min.js", "jquery-3.1.0.min.js"], dest: "build/js" },
           { src: ['README.md'], dest: "build/README.md" }
         ]
       },
@@ -142,7 +142,7 @@ module.exports = function(grunt) {
       development: {
         options: {
           paths: ["src/css"],
-          cleancss: true 
+          cleancss: true
         },
         files: {
           "build/css/valiant360.css": "src/css/valiant360.less"

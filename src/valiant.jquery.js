@@ -259,8 +259,8 @@ three.js r65 or higher
 
             element.on( 'mousemove touchmove', this.onMouseMove.bind(this) );
             element.on( 'mousewheel DOMMouseScroll', this.onMouseWheel.bind(this) );
-            element.on( 'mousedown touchstart' , this.onMouseDown.bind(this) );
-            element.on( 'mouseup touchend' , this.onMouseUp.bind(this) );
+            element.on( 'mousedown touchstart', this.onMouseDown.bind(this) );
+            element.on( 'mouseup touchend', this.onMouseUp.bind(this) );
 
             $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange',this.fullscreen.bind(this));
 
@@ -451,18 +451,19 @@ three.js r65 or higher
         },
 
         fullscreen: function() {
-            if($(this.element).find('a.fa-expand').length > 0) {
+            var element = $(this.element);
+            if(element.find('a.fa-expand').length > 0) {
                 this.resizeGL(screen.width, screen.height);
 
-                $(this.element).addClass('fullscreen');
-                $(this.element).find('a.fa-expand').removeClass('fa-expand').addClass('fa-compress');
+                element.addClass('fullscreen');
+                element.find('a.fa-expand').removeClass('fa-expand').addClass('fa-compress');
 
                 this._isFullscreen = true;
             } else {
                 this.resizeGL(this._originalWidth, this._originalHeight);
 
-                $(this.element).removeClass('fullscreen');
-                $(this.element).find('a.fa-compress').removeClass('fa-compress').addClass('fa-expand');
+                element.removeClass('fullscreen');
+                element.find('a.fa-compress').removeClass('fa-compress').addClass('fa-expand');
 
                 this._isFullscreen = false;
             }
